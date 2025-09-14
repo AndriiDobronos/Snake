@@ -20,7 +20,7 @@
             <div class="controls">
                 <div class="speed-control">
                     <label for="speedSlider">Speed:</label>
-                    <input type="range" id="speedSlider" min="0.5" max="3" step="0.1" value="1" />
+                    <input type="range" id="speedSlider" min="0.2" max="3" step="0.1" value="1" />
                     <span id="speedValue">1.0x</span>
                 </div>
                 <button id="pauseBtn" type="button" aria-pressed="false">Pause (Space)</button>
@@ -28,8 +28,36 @@
             </div>
         </div>
         <div class="canvas-wrap">
-            <canvas id="game" width="600" height="600" aria-label="Snake game" role="img"></canvas>
+            <canvas id="game" aria-label="Snake game" role="img"></canvas>
             <div id="overlay" class="overlay hidden" aria-live="polite"></div>
+        </div>
+
+        <!-- Мобильные элементы управления -->
+        <div class="mobile-controls">
+            <div class="dpad">
+                <button class="dpad-btn dpad-up" id="btnUp" aria-label="Move up">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 14l5-5 5 5z" />
+                    </svg>
+                </button>
+                <div class="dpad-middle">
+                    <button class="dpad-btn dpad-left" id="btnLeft" aria-label="Move left">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15 7l-5 5 5 5z" />
+                        </svg>
+                    </button>
+                    <button class="dpad-btn dpad-right" id="btnRight" aria-label="Move right">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 7l5 5-5 5z" />
+                        </svg>
+                    </button>
+                </div>
+                <button class="dpad-btn dpad-down" id="btnDown" aria-label="Move down">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 10l5 5 5-5z" />
+                    </svg>
+                </button>
+            </div>
         </div>
         <details class="help">
             <summary>How to play</summary>

@@ -9,10 +9,52 @@ const pauseBtn = document.getElementById("pauseBtn");
 const restartBtn = document.getElementById("restartBtn");
 const overlay = document.getElementById("overlay");
 
+// Мобильные элементы управления
+const btnUp = document.getElementById("btnUp");
+const btnDown = document.getElementById("btnDown");
+const btnLeft = document.getElementById("btnLeft");
+const btnRight = document.getElementById("btnRight");
+
 const GRID_CELLS = 30; // 30x30 grid
-const CELL_SIZE = Math.floor(canvas.width / GRID_CELLS);
+let CELL_SIZE;
 const BASE_SPEED_FPS = 8; // base steps per second
 const STORAGE_KEY = "snakeHighScore";
+
+// Функция для расчета размера canvas
+function calculateCanvasSize() {
+    const container = canvas.parentElement;
+    const containerRect = container.getBoundingClientRect();
+    const padding = 24; // padding контейнера
+    const availableWidth = containerRect.width - padding;
+    const availableHeight = Math.min(containerRect.height - padding, window.innerHeight * 0.7);
+
+    // Ограничения: максимум 80% ширины и 70% высоты экрана
+    const maxWidth = Math.min(availableWidth, window.innerWidth * 0.8);
+    const maxHeight = Math.min(availableHeight, window.innerHeight * 0.7);
+
+    // Выбираем меньший размер для квадратного поля
+    const maxSize = Math.min(maxWidth, maxHeight);
+
+    // Рассчитываем размер клетки для сетки 30x30
+    const cellSize = Math.floor(maxSize / GRID_CELLS);
+    const canvasSize = cellSize * GRID_CELLS;
+
+    return { size: canvasSize, cellSize };
+}
+
+// Функция для обновления размера canvas
+function resizeCanvas() {
+    const { size, cellSize } = calculateCanvasSize();
+    CELL_SIZE = cellSize;
+
+    canvas.width = size;
+    canvas.height = size;
+
+    // Перерисовываем игру
+    if (state) {
+        draw();
+    }
+}
 
 function createInitialState() {
     const startX = Math.floor(GRID_CELLS / 2);
@@ -46,12 +88,14 @@ function spawnApple(occupied) {
     }
 }
 
-let state = createInitialState();
+let state;
 
 function resetGame() {
     state = createInitialState();
     // Устанавливаем скорость из слайдера при рестарте
     state.speedMultiplier = parseFloat(speedSlider.value);
+    // Пересчитываем размер canvas
+    resizeCanvas();
     updateHUD();
     hideOverlay();
 }
@@ -114,6 +158,15 @@ function handleInput(e) {
     const curr = state.direction;
     if (curr.x + next.x === 0 && curr.y + next.y === 0) return;
     state.queuedDirection = next;
+}
+
+// Функция для обработки мобильного ввода
+function handleMobileInput(direction) {
+    if (state.gameOver || state.paused) return;
+
+    const curr = state.direction;
+    if (curr.x + direction.x === 0 && curr.y + direction.y === 0) return;
+    state.queuedDirection = direction;
 }
 
 function step() {
@@ -212,6 +265,34 @@ pauseBtn.addEventListener("click", togglePause);
 restartBtn.addEventListener("click", resetGame);
 speedSlider.addEventListener("input", handleSpeedChange);
 window.addEventListener("keydown", handleInput);
+window.addEventListener("resize", resizeCanvas);
 
+// Обработчики для мобильных кнопок
+btnUp.addEventListener("click", () => handleMobileInput({ x: 0, y: -1 }));
+btnDown.addEventListener("click", () => handleMobileInput({ x: 0, y: 1 }));
+btnLeft.addEventListener("click", () => handleMobileInput({ x: -1, y: 0 }));
+btnRight.addEventListener("click", () => handleMobileInput({ x: 1, y: 0 }));
+
+// Обработчики для touch событий (предотвращение двойного тапа)
+btnUp.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    handleMobileInput({ x: 0, y: -1 });
+});
+btnDown.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    handleMobileInput({ x: 0, y: 1 });
+});
+btnLeft.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    handleMobileInput({ x: -1, y: 0 });
+});
+btnRight.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    handleMobileInput({ x: 1, y: 0 });
+});
+
+// Инициализация
+resizeCanvas();
+state = createInitialState();
 updateHUD();
 requestAnimationFrame((ts) => { state.lastTs = ts; requestAnimationFrame(loop); });
