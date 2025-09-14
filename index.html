@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake TS</title>
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+<div class="app">
+    <h1>Snake</h1>
+    <div class="hud">
+        <div class="scoreboard">
+            <span>Score: <strong id="score">0</strong></span>
+            <span>High: <strong id="highScore">0</strong></span>
+            <span>Speed: <strong id="speed">1.0x</strong></span>
+        </div>
+        <div class="controls">
+            <button id="pauseBtn" type="button" aria-pressed="false">Pause (Space)</button>
+            <button id="restartBtn" type="button">Restart (R)</button>
+        </div>
+    </div>
+    <div class="canvas-wrap">
+        <canvas id="game" width="600" height="600" aria-label="Snake game" role="img"></canvas>
+        <div id="overlay" class="overlay hidden" aria-live="polite"></div>
+    </div>
+    <details class="help">
+        <summary>How to play</summary>
+        <ul>
+            <li>Use Arrow Keys or WASD to move</li>
+            <li>Press Space to pause/resume</li>
+            <li>Press R to restart after game over</li>
+            <li>Eat apples to grow and increase score</li>
+            <li>Don't crash into walls or yourself</li>
+        </ul>
+    </details>
+</div>
+<!-- For instant play use compiled JS. For Vite dev, import '/src/main.ts' instead. -->
+<script type="module" src="./main.js"></script>
+</body>
+</html>
