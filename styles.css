@@ -32,7 +32,48 @@ body{
 }
 .scoreboard{display:flex;gap:16px;color:var(--muted)}
 .scoreboard strong{color:var(--text)}
-.controls{display:flex;gap:8px}
+.controls{display:flex;gap:8px;align-items:center}
+.speed-control{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--muted);
+    font-size:14px;
+}
+.speed-control label{
+    white-space:nowrap;
+}
+#speedSlider{
+    width:100px;
+    height:6px;
+    background:var(--panel);
+    border:1px solid #2d325f;
+    border-radius:3px;
+    outline:none;
+    cursor:pointer;
+}
+#speedSlider::-webkit-slider-thumb{
+    appearance:none;
+    width:16px;
+    height:16px;
+    background:linear-gradient(180deg, #6ae36a, #5ac8fa);
+    border-radius:50%;
+    cursor:pointer;
+    border:2px solid var(--panel);
+}
+#speedSlider::-moz-range-thumb{
+    width:16px;
+    height:16px;
+    background:linear-gradient(180deg, #6ae36a, #5ac8fa);
+    border-radius:50%;
+    cursor:pointer;
+    border:2px solid var(--panel);
+}
+#speedValue{
+    color:var(--text);
+    font-weight:bold;
+    min-width:35px;
+}
 button{
     background:linear-gradient(180deg, #24294f, #1a1e3b);
     color:var(--text);

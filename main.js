@@ -3,6 +3,8 @@ const ctx = canvas.getContext("2d");
 const scoreEl = document.getElementById("score");
 const highScoreEl = document.getElementById("highScore");
 const speedEl = document.getElementById("speed");
+const speedSlider = document.getElementById("speedSlider");
+const speedValue = document.getElementById("speedValue");
 const pauseBtn = document.getElementById("pauseBtn");
 const restartBtn = document.getElementById("restartBtn");
 const overlay = document.getElementById("overlay");
@@ -48,14 +50,23 @@ let state = createInitialState();
 
 function resetGame() {
     state = createInitialState();
+    // Устанавливаем скорость из слайдера при рестарте
+    state.speedMultiplier = parseFloat(speedSlider.value);
     updateHUD();
     hideOverlay();
+}
+
+function handleSpeedChange() {
+    const newSpeed = parseFloat(speedSlider.value);
+    state.speedMultiplier = newSpeed;
+    updateHUD();
 }
 
 function updateHUD() {
     scoreEl.textContent = String(state.score);
     highScoreEl.textContent = String(state.highScore);
     speedEl.textContent = `${state.speedMultiplier.toFixed(1)}x`;
+    speedValue.textContent = `${state.speedMultiplier.toFixed(1)}x`;
     pauseBtn.setAttribute("aria-pressed", state.paused ? "true" : "false");
     pauseBtn.textContent = state.paused ? "Resume (Space)" : "Pause (Space)";
 }
@@ -199,6 +210,7 @@ function loop(ts) {
 
 pauseBtn.addEventListener("click", togglePause);
 restartBtn.addEventListener("click", resetGame);
+speedSlider.addEventListener("input", handleSpeedChange);
 window.addEventListener("keydown", handleInput);
 
 updateHUD();
